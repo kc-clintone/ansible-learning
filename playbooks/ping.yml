@@ -1,0 +1,15 @@
+---
+# ping.yml - Basic connectivity test
+# Tests if we can reach all hosts
+# Run with: ansible-playbook playbooks/ping.yml
+
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ping all hosts
+      ping:
+      register: ping_result
+
+    - name: Display ping result
+      debug:
+        var: ping_result
