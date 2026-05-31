@@ -37,3 +37,35 @@
         autoremove: yes
 
 ---
+# SERVICE MODULE EXAMPLES
+- hosts: webservers
+  tasks:
+    - name: "SERVICE MODULE - Start service"
+      service:
+        name: nginx
+        state: started
+
+    - name: "SERVICE MODULE - Restart service"
+      service:
+        name: nginx
+        state: restarted
+
+    - name: "SERVICE MODULE - Stop service"
+      service:
+        name: nginx
+        state: stopped
+
+    - name: "SERVICE MODULE - Enable on boot"
+      service:
+        name: nginx
+        enabled: yes
+
+    - name: "SERVICE MODULE - Get service status"
+      service_facts:
+      register: service_facts
+
+    - name: "Display nginx status"
+      debug:
+        msg: "{{ service_facts.ansible_facts.services['nginx.service'] }}"
+
+---
