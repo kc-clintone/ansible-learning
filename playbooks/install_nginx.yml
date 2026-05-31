@@ -1,0 +1,38 @@
+---
+# install_nginx.yml - Install and configure Nginx web server
+# Sets up Nginx, ensures it's running, and enables on boot
+# Run with: ansible-playbook playbooks/install_nginx.yml
+
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Get Nginx version
+      command: nginx -v
+      register: nginx_version
+      changed_when: false
+
+    - name: Display Nginx version
+      debug:
+        msg: "{{ nginx_version.stderr }}"
+
+    - name: Verify Nginx is listening on port 80
+      wait_for:
+        port: 80
+        state: started
+        timeout: 10
