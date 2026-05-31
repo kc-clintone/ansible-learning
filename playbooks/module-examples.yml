@@ -69,3 +69,39 @@
         msg: "{{ service_facts.ansible_facts.services['nginx.service'] }}"
 
 ---
+# COPY MODULE EXAMPLES
+- hosts: webservers
+  tasks:
+    - name: "COPY MODULE - Copy single file"
+      copy:
+        src: /local/config/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: "0644"
+        backup: yes
+
+    - name: "COPY MODULE - Copy with inline content"
+      copy:
+        content: |
+          server {
+              listen 80;
+              server_name localhost;
+          }
+        dest: /etc/nginx/sites-available/default
+
+    - name: "COPY MODULE - Copy entire directory"
+      copy:
+        src: /local/webroot/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: "0755"
+        recurse: yes
+
+    - name: "COPY MODULE - Create file with permissions"
+      copy:
+        content: "This is a config file"
+        dest: /etc/myapp/config.conf
+        mode: "0600"
+        owner: appuser
