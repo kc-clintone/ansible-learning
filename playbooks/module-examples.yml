@@ -1,0 +1,39 @@
+---
+# module-examples.yml - Practical examples of commonly used Ansible modules
+# Week 2 learning: Deep dive into modules
+# Run with: ansible-playbook playbooks/module-examples.yml
+
+# APT MODULE EXAMPLES
+- hosts: webservers
+  gather_facts: yes
+  tasks:
+    - name: "APT MODULE - Update all packages"
+      apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_os_family == "Debian"
+
+    - name: "APT MODULE - Install single package"
+      apt:
+        name: curl
+        state: present
+
+    - name: "APT MODULE - Install multiple packages"
+      apt:
+        name:
+          - git
+          - htop
+          - wget
+          - vim
+        state: present
+
+    - name: "APT MODULE - Remove package"
+      apt:
+        name: apache2
+        state: absent
+
+    - name: "APT MODULE - Autoremove unused packages"
+      apt:
+        autoremove: yes
+
+---
