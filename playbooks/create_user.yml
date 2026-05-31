@@ -1,0 +1,43 @@
+---
+# create_user.yml - User account management
+# Creates system users and manages permissions
+# Run with: ansible-playbook playbooks/create_user.yml
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create application user
+      user:
+        name: appuser
+        state: present
+        shell: /bin/bash
+        createhome: yes
+        comment: "Application Service Account"
+
+    - name: Add user to sudo group
+      user:
+        name: appuser
+        groups: sudo
+        append: yes
+
+    - name: Create .ssh directory for appuser
+      file:
+        path: /home/appuser/.ssh
+        state: directory
+        owner: appuser
+        group: appuser
+        mode: "0700"
+
+    - name: Display user info
+      debug:
+        msg: "User appuser created successfully"
+
+    - name: Verify user was created
+      getent:
+        database: passwd
+        key: appuser
+      register: user_info
+
+    - name: Show user details
+      debug:
+        var: user_info.ansible_facts.getent_passwd.appuser
