@@ -103,3 +103,33 @@
         state: started
         enabled: yes
 
+   - name: Wait for Nginx to be ready
+      wait_for:
+        port: "{{ nginx_port }}"
+        state: started
+        timeout: 10
+
+    - name: Test Nginx connectivity
+      uri:
+        url: "http://localhost:{{ nginx_port }}"
+        status_code: 200
+      register: nginx_test_result
+
+    - name: Display deployment summary
+      debug:
+        msg: |
+          ✓ Nginx deployed successfully!
+          - Host: {{ ansible_hostname }}
+          - IP: {{ ansible_default_ipv4.address }}
+          - Port: {{ nginx_port }}
+          - Worker Processes: {{ nginx_worker_processes }}
+          - Status: {{ nginx_test_result.status }}
+
+  post_tasks:
+    - name: Generate deployment report
+      shell: |
+        echo "Nginx Deployment Report - $(date)" > /tmp/deployment.log
+        echo "Hostname: $(hostname)" >> /tmp/deployment.log
+        echo "Nginx Version: $(nginx -v 2>&1)" >> /tmp/deployment.log
+        echo "Nginx Status: $(systemctl is-active nginx)" >> /tmp/deployment.log
+      changed_when: false
