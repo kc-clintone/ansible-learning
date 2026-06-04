@@ -1,0 +1,23 @@
+---
+# nginx-deployment.yml - Advanced Nginx playbook with variables and handlers
+# Week 2 project: More complex deployment with multiple tasks
+# Run with: ansible-playbook playbooks/nginx-deployment.yml
+
+- hosts: webservers
+  become: yes
+  vars:
+    nginx_port: 80
+    nginx_user: www-data
+    nginx_worker_processes: 4
+    nginx_max_open_files: 65535
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: validate nginx
+      command: nginx -t
+      register: nginx_test
+      notify: restart nginx
