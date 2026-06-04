@@ -1,0 +1,146 @@
+---
+# variables-and-facts.yml - Learning about Ansible variables
+# Week 2: Understanding variable types and scope
+# Run with: ansible-playbook playbooks/variables-and-facts.yml
+
+- hosts: all
+  gather_facts: yes
+
+  # Playbook-level variables
+  vars:
+    app_name: MyApplication
+    app_version: "1.0.0"
+    app_user: "appuser"
+    app_home: "/opt/myapp"
+    environment: development
+
+    # List variables
+    required_packages:
+      - curl
+      - wget
+      - git
+      - python3-pip
+
+    # Dictionary variables
+    web_config:
+      port: 8080
+      host: "0.0.0.0"
+      timeout: 30
+      workers: 4
+
+  tasks:
+    - name: "SECTION 1: Using Variables"
+      debug:
+        msg: |
+          Application: {{ app_name }}
+          Version: {{ app_version }}
+          User: {{ app_user }}
+          Home: {{ app_home }}
+
+    - name: "SECTION 2: Ansible Facts (gathered automatically)"
+      debug:
+        msg: |
+          Hostname: {{ ansible_hostname }}
+          OS Family: {{ ansible_os_family }}
+          Kernel: {{ ansible_kernel }}
+          IP Address: {{ ansible_default_ipv4.address }}
+          CPU Count: {{ ansible_processor_vcpus }}
+          Memory: {{ ansible_memtotal_mb }} MB
+
+    - name: "SECTION 3: List variable iteration"
+      debug:
+        msg: "Installing: {{ item }}"
+      loop: "{{ required_packages }}"
+
+    - name: "SECTION 4: Dictionary variable access"
+      debug:
+        msg: |
+          Web Config:
+          - Port: {{ web_config.port }}
+          - Host: {{ web_config.host }}
+          - Timeout: {{ web_config.timeout }}
+          - Workers: {{ web_config.workers }}
+
+    - name: "SECTION 5: Conditional based on variable"
+      debug:
+        msg: "Running in {{ environment }} mode"
+      when: environment == 'development'
+
+    - name: "SECTION 6: Filter examples (manipulate variables)"
+      debug:
+        msg: |
+          Upper: {{ app_name | upper }}
+          Lower: {{ app_name | lower }}
+          Length: {{ app_name | length }}
+          First package: {{ required_packages | first }}
+          List length: {{ required_packages | length }}
+
+    - name: "SECTION 7: Variable registration (capturing output)"
+      command: whoami
+      register: current_user
+      changed_when: false
+
+    - name: "Display registered variable"
+      debug:
+        msg: "Current user: {{ current_user.stdout }}"
+
+    - name: "SECTION 8: Fact caching for reuse"
+      set_fact:
+        deployment_info: |
+          Host: {{ ansible_hostname }}
+          User: {{ app_user }}
+          Path: {{ app_home }}
+          Environment: {{ environment }}
+
+    - name: "Use cached fact"
+      debug:
+        msg: "{{ deployment_info }}"
+
+    - name: "SECTION 9: Variable with conditional"
+      set_fact:
+        service_enabled: "{{ 'yes' if environment == 'production' else 'no' }}"
+
+    - name: "Service status"
+      debug:
+        msg: "Service enabled: {{ service_enabled }}"
+
+    - name: "SECTION 10: Complex data structure"
+      set_fact:
+        servers:
+          - name: web1
+            ip: 192.168.1.10
+            port: 80
+          - name: web2
+            ip: 192.168.1.11
+            port: 80
+          - name: db1
+            ip: 192.168.1.20
+            port: 5432
+
+    - name: "Iterate complex structure"
+      debug:
+        msg: "{{ item.name }}: {{ item.ip }}:{{ item.port }}"
+      loop: "{{ servers }}"
+
+    - name: "SECTION 11: Summary Report"
+      debug:
+        msg: |
+
+          ===== VARIABLES & FACTS SUMMARY =====
+
+          PLAYBOOK VARIABLES:
+          • Application: {{ app_name }} v{{ app_version }}
+          • Environment: {{ environment }}
+          • Required Packages: {{ required_packages | length }}
+
+          SYSTEM FACTS:
+          • Hostname: {{ ansible_hostname }}
+          • OS: {{ ansible_os_family }}
+          • CPU Cores: {{ ansible_processor_vcpus }}
+          • RAM: {{ (ansible_memtotal_mb / 1024) | round(2) }} GB
+
+          REGISTERED VALUES:
+          • Current User: {{ current_user.stdout }}
+          • Servers Configured: {{ servers | length }}
+
+          =====================================
