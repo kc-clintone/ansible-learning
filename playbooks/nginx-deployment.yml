@@ -63,3 +63,43 @@
         line: "worker_rlimit_nofile {{ nginx_max_open_files }};"
       notify: restart nginx
 
+    - name: Create web root directory
+      file:
+        path: /var/www/html
+        state: directory
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+        mode: "0755"
+
+    - name: Create index.html
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Welcome to Ansible Managed Nginx</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 50px; }
+                  .info { background: #f0f0f0; padding: 20px; border-radius: 5px; }
+              </style>
+          </head>
+          <body>
+              <h1>Nginx is Running!</h1>
+              <div class="info">
+                  <p>This server was configured by Ansible</p>
+                  <p>Hostname: {{ ansible_hostname }}</p>
+                  <p>IP Address: {{ ansible_default_ipv4.address }}</p>
+              </div>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+      notify: restart nginx
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
