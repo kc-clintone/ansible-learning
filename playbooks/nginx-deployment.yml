@@ -21,3 +21,45 @@
       command: nginx -t
       register: nginx_test
       notify: restart nginx
+
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - wget
+          - net-tools
+        state: present
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create Nginx config backup
+      copy:
+        src: /etc/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf.bak
+        remote_src: yes
+        backup: yes
+
+    - name: Configure Nginx worker processes
+      lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: "worker_processes"
+        line: "worker_processes {{ nginx_worker_processes }};"
+      notify: restart nginx
+
+    - name: Configure max open files
+      lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: "worker_rlimit_nofile"
+        line: "worker_rlimit_nofile {{ nginx_max_open_files }};"
+      notify: restart nginx
+
