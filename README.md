@@ -201,10 +201,10 @@ ansible-playbook playbooks/variables-and-facts.yml
 
 ## 🛠 Technologies & Environment
 
-- **OS:** Ubuntu 24.04 LTS
-- **Ansible Version:** 2.10.8+
+- **OS:** Ubuntu 26.04 LTS
+- **Ansible Version:** 2.10+
 - **Control Node:** Development machine (local)
-- **Managed Nodes:** localhost + SSH infrastructure
+- **Managed Nodes:** localhost + VMs
 - **Configuration:** ansible.cfg for project-specific settings
 
 ---
@@ -249,10 +249,10 @@ ansible-playbook playbooks/variables-and-facts.yml
 
 ## 📈 Next Steps
 
-- [ ] Implement Ansible Roles for modularity
+- [x] Implement Ansible Roles for modularity
 - [ ] Build comprehensive error handling (block/rescue/always)
 - [ ] Create multi-tier deployment examples
-- [ ] Integrate with CI/CD pipelines
+- [ In progress ] Integrate with CI/CD pipelines
 - [ ] Explore dynamic inventory
 - [ ] Production hardening practices
 
@@ -261,14 +261,15 @@ ansible-playbook playbooks/variables-and-facts.yml
 ## 📞 Learning Resources Used
 
 - Official Ansible Documentation
+- Red Hat Ansible
 - Hands-on experimentation
-- Real-world playbook examples
+- Playbook examples
 - Module documentation reference
 
 ---
 
-**Last Updated:** May 30, 2026  
-**Status:** Active Learning - Week 2 In Progress  
+**Last Updated:** July 24, 2026  
+**Status:** Active Learning - Week 4 In Progress  
 **License:** Learning Project
 
 ---
