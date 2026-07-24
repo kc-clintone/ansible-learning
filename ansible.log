@@ -1,0 +1,34 @@
+2026-07-18 20:30:55,374 p=87385 u=c-137 n=ansible ERROR| [ERROR]: Could not load 'human_friendly' callback plugin.
+
+2026-07-18 20:30:56,119 p=87390 u=c-137 n=ansible ERROR| [ERROR]: Could not load 'human_friendly' callback plugin.
+
+2026-07-18 20:31:08,319 p=87428 u=c-137 n=ansible WARNING| [WARNING]: Collection at '/usr/lib/python3/dist-packages/ansible/_internal/ansible_collections/ansible/_protomatter' does not have a MANIFEST.json file, nor has it galaxy.yml: cannot detect version.
+
+2026-07-18 20:31:08,554 p=87428 u=c-137 n=ansible WARNING| [WARNING]: Deprecation warnings can be disabled by setting `deprecation_warnings=False` in ansible.cfg.
+
+2026-07-18 20:31:08,554 p=87428 u=c-137 n=ansible INFO| [DEPRECATION WARNING]: community.general.loganalytics has been deprecated. The "HTTP Data Collector API" used by the plugin has been deprecated in Azure and replaced with the "Logs Ingestion API".  Please migrate to the 'community.general.loganalytics_ingestion' plugin. This feature will be removed from collection 'community.general' version 14.0.0.
+Origin: <unknown>
+
+community.general.loganalytics
+
+
+2026-07-18 20:31:08,663 p=87428 u=c-137 n=ansible INFO| [DEPRECATION WARNING]: Importing 'to_text' from 'ansible.module_utils._text' is deprecated. This feature will be removed from ansible-core version 2.24. Use ansible.module_utils.common.text.converters instead.
+
+2026-07-18 20:31:09,415 p=87435 u=c-137 n=ansible INFO| PLAY [Test Connectivity to My Local Sandbox] ***********************************
+2026-07-18 20:31:09,421 p=87435 u=c-137 n=ansible INFO| TASK [Gathering Facts] *********************************************************
+2026-07-18 20:31:12,496 p=87435 u=c-137 n=ansible WARNING| [WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3.14', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.21/reference_appendices/interpreter_discovery.html for more information.
+
+2026-07-18 20:31:12,496 p=87435 u=c-137 n=ansible INFO| ok: [localhost]
+2026-07-18 20:31:12,501 p=87435 u=c-137 n=ansible INFO| TASK [Ping the containers] *****************************************************
+2026-07-18 20:31:12,861 p=87435 u=c-137 n=ansible INFO| ok: [localhost]
+2026-07-18 20:31:12,862 p=87435 u=c-137 n=ansible INFO| PLAY RECAP *********************************************************************
+2026-07-18 20:31:12,862 p=87435 u=c-137 n=ansible INFO| localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2026-07-18 20:31:36,109 p=87666 u=c-137 n=ansible INFO| PLAY [Test Connectivity to My Local Sandbox] ***********************************
+2026-07-18 20:31:36,114 p=87666 u=c-137 n=ansible INFO| TASK [Gathering Facts] *********************************************************
+2026-07-18 20:31:36,160 p=87666 u=c-137 n=ansible ERROR| [ERROR]: Task failed: Docker version check (['/usr/bin/docker', 'version', '--format', "'{{.Server.Version}}'"]) failed: permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+
+2026-07-18 20:31:36,161 p=87666 u=c-137 n=ansible INFO| fatal: [web1]: FAILED! => {"changed": false, "msg": "Task failed: Docker version check (['/usr/bin/docker', 'version', '--format', \"'{{.Server.Version}}'\"]) failed: permission denied while trying to connect to the docker API at unix:///var/run/docker.sock"}
+2026-07-18 20:31:36,165 p=87666 u=c-137 n=ansible INFO| fatal: [web2]: FAILED! => {"changed": false, "msg": "Task failed: Docker version check (['/usr/bin/docker', 'version', '--format', \"'{{.Server.Version}}'\"]) failed: permission denied while trying to connect to the docker API at unix:///var/run/docker.sock"}
+2026-07-18 20:31:36,166 p=87666 u=c-137 n=ansible INFO| PLAY RECAP *********************************************************************
+2026-07-18 20:31:36,167 p=87666 u=c-137 n=ansible INFO| web1                       : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2026-07-18 20:31:36,167 p=87666 u=c-137 n=ansible INFO| web2                       : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   

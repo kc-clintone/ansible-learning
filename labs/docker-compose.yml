@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  ansible_net:
+    driver: bridge
+
+services:
+  # The managed target nodes (Ubuntu servers running SSH)
+  target1:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: target1
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD_ACCESS=true
+      - USER_PASSWORD=password123
+      - USER_NAME=myserveruser
+    networks:
+      - ansible_net
+
+  target2:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: target2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD_ACCESS=true
+      - USER_PASSWORD=password123
+      - USER_NAME=myserveruser
+    networks:
+      - ansible_net
+
+  # The main container where you will run your Ansible playbooks
+  control_node:
+    image: ubuntu:24.04
+    container_name: control_node
+    volumes:
+      - .:/home/workspace
+    working_dir: /home/workspace
+    networks:
+      - ansible_net
+    tty: true
+    stdin_open: true

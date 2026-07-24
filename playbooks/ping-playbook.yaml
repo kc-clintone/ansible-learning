@@ -1,0 +1,7 @@
+---
+- name: Test Connectivity to My Local Sandbox
+  hosts: webservers
+  gather_facts: true  # This will now successfully pull system info!
+  tasks:
+    - name: Ping the containers
+      ansible.builtin.ping:
